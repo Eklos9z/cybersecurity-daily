@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网安日报速递 - 2026年6月3日</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+        :root {
+            --ink-black: #1a1a1a;
+            --ink-dark: #2d2d2d;
+            --paper-cream: #f5f0e8;
+            --paper-aged: #e8e0d0;
+            --accent-red: #c41e3a;
+            --accent-orange: #e85d04;
+            --accent-gold: #c9a227;
+            --border-dark: #3d3d3d;
+            --border-light: #b8b0a0;
+            --shadow-dark: rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--ink-black);
+            font-family: 'Noto Serif SC', 'Georgia', serif;
+            color: var(--ink-black);
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .newspaper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--paper-cream);
+            box-shadow: 0 0 60px rgba(0,0,0,0.5), 0 0 120px rgba(0,0,0,0.3);
+            border: 3px solid var(--border-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Aged paper effect */
+        .newspaper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 10% 10%, rgba(139,90,43,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 90%, rgba(139,90,43,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.02) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Masthead */
+        .masthead {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 30px 40px 20px;
+            text-align: center;
+            border-bottom: 4px double var(--accent-gold);
+            position: relative;
+        }
+
+        .masthead::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-red);
+        }
+
+        .newspaper-title {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 3.5em;
+            font-weight: 900;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(180deg, #fff 0%, #d4c5a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .newspaper-subtitle {
+            font-size: 1.2em;
+            letter-spacing: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        .edition-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            background: var(--paper-aged);
+            border-bottom: 2px solid var(--border-light);
+            font-size: 0.85em;
+            color: var(--ink-dark);
+        }
+
+        .edition-date {
+            font-weight: 700;
+            color: var(--accent-red);
+        }
+
+        .edition-number {
+            font-style: italic;
+        }
+
+        .keywords-banner {
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));
+            color: white;
+            padding: 12px 40px;
+            font-size: 0.95em;
+            letter-spacing: 2px;
+        }
+
+        .keywords-banner strong {
+            margin-right: 10px;
+        }
+
+        /* Main content */
+        .content-wrapper {
+            padding: 30px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Headlines */
+        .headline-section {
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--ink-black);
+            padding-bottom: 30px;
+        }
+
+        .main-headline {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            color: var(--ink-black);
+            border-left: 6px solid var(--accent-red);
+            padding-left: 20px;
+        }
+
+        .sub-headline {
+            font-size: 1.4em;
+            color: var(--ink-dark);
+            font-style: italic;
+            margin-bottom: 20px;
+            padding-left: 26px;
+        }
+
+        /* Article grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .article-card {
+            border: 1px solid var(--border-light);
+            padding: 25px;
+            background: rgba(255,255,255,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--shadow-dark);
+        }
+
+        .article-card.featured {
+            grid-column: span 2;
+            grid-row: span 2;
+            border: 2px solid var(--accent-red);
+            background: linear-gradient(135deg, rgba(196,30,58,0.05) 0%, rgba(255,255,255,0.8) 100%);
+        }
+
+        .article-number {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--ink-black);
+            color: var(--accent-gold);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1em;
+            border-radius: 50%;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .severity-critical {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .severity-high {
+            background: var(--accent-orange);
+            color: white;
+        }
+
+        .severity-medium {
+            background: var(--accent-gold);
+            color: var(--ink-black);
+        }
+
+        .article-title {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: var(--ink-black);
+        }
+
+        .article-meta {
+            font-size: 0.85em;
+            color: var(--ink-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .cvss-score {
+            display: inline-block;
+            background: var(--ink-black);
+            color: var(--accent-red);
+            padding: 2px 10px;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .article-body {
+            font-size: 0.95em;
+            line-height: 1.9;
+            color: var(--ink-dark);
+        }
+
+        .article-body p {
+            margin-bottom: 12px;
+            text-indent: 2em;
+        }
+
+        .article-body ul, .article-body ol {
+            margin: 10px 0;
+            padding-left: 2em;
+        }
+
+        .article-body li {
+            margin-bottom: 5px;
+        }
+
+        /* Section headers */
+        .section-header {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--ink-black);
+            border-bottom: 3px solid var(--ink-black);
+            padding-bottom: 10px;
+            margin: 40px 0 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header::before {
+            content: '§';
+            color: var(--accent-red);
+            font-size: 1.2em;
+        }
+
+        /* Attack flow */
+        .attack-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.03);
+            border-radius: 4px;
+        }
+
+        .flow-step {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 8px 16px;
+            font-size: 0.85em;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .flow-step.critical {
+            background: var(--accent-red);
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .comparison-table th {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(232,93,4,0.05);
+        }
+
+        /* Affected systems table */
+        .affected-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .affected-table th {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .affected-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .affected-table tr:hover {
+            background: rgba(232,93,4,0.05);
+        }
+
+        .risk-high {
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+
+        .risk-medium {
+            color: var(--accent-orange);
+            font-weight: 700;
+        }
+
+        /* Charts section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            border: 1px solid var(--border-light);
+            padding: 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .chart-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--ink-black);
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* References */
+        .references-section {
+            background: var(--paper-aged);
+            padding: 30px;
+            margin-top: 40px;
+            border-top: 4px double var(--ink-black);
+        }
+
+        .references-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .reference-item {
+            font-size: 0.8em;
+            padding: 10px;
+            background: white;
+            border: 1px solid var(--border-light);
+        }
+
+        .reference-item a {
+            color: var(--accent-red);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .reference-item a:hover {
+            text-decoration: underline;
+        }
+
+        .reference-source {
+            font-weight: 700;
+            color: var(--ink-dark);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .newspaper-footer {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 4px double var(--accent-gold);
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .footer-disclaimer {
+            font-size: 0.85em;
+            color: rgba(245,240,232,0.7);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .article-card.featured {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .newspaper-title {
+                font-size: 2em;
+                letter-spacing: 4px;
+            }
+            .main-headline {
+                font-size: 1.8em;
+            }
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            .article-card.featured {
+                grid-column: span 1;
+            }
+            .quick-news {
+                grid-template-columns: 1fr;
+            }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            .references-grid {
+                grid-template-columns: 1fr;
+            }
+            .edition-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .archive-grid {
+                padding: 20px;
+                grid-template-columns: 1fr;
+            }
+            .content-wrapper {
+                padding: 20px;
+            }
+            .masthead {
+                padding: 20px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .newspaper {
+                box-shadow: none;
+                border: none;
+            }
+            .article-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="newspaper">
+        <!-- Masthead -->
+        <header class="masthead">
+            <div class="newspaper-subtitle">AI城 · 网络安全</div>
+            <h1 class="newspaper-title">网安日报速递</h1>
+            <div class="newspaper-subtitle">CYBERSECURITY DAILY EXPRESS</div>
+        </header>
+
+        <!-- Edition Info -->
+        <div class="edition-info">
+            <span class="edition-date">2026年6月3日 星期二</span>
+            <span class="edition-number">第 21 期 | 总第 21 期</span>
+            <span>每日精选 · 值得关注</span>
+        </div>
+
+        <!-- Keywords Banner -->
+        <div class="keywords-banner">
+            <strong>今日关键词：</strong>Netlogon零点击RCE | Oracle WebLogic KEV | Red Hat npm供应链 | Android零日 | Kirki WordPress提权
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Main Headline -->
+            <div class="headline-section">
+                <h2 class="main-headline">CVE-2026-41089 — Windows Netlogon 零点击 RCE 持续在野利用：继 Zerologon 后第二个核弹级漏洞</h2>
+                <p class="sub-headline">CVSS 9.8，比利时CCB于6月1日确认在野利用，域控制器一击即溃</p>
+            </div>
+
+            <!-- Featured Articles -->
+            <div class="articles-grid">
+                <!-- Featured Article 1 -->
+                <article class="article-card featured">
+                    <span class="article-number">1</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2026-41089 — Windows Netlogon 零点击 RCE 持续在野利用</h3>
+                    <div class="article-meta">
+                        <span>CVSS 9.8</span>
+                        <span class="cvss-score">在野利用</span>
+                        <span>披露时间：2026年5月12日（微软5月补丁日）</span>
+                    </div>
+                    <div class="article-body">
+                        <p>CVE-2026-41089 是继 Zerologon（CVE-2020-1472）之后，Windows Netlogon 服务曝出的第二个核弹级漏洞。攻击者可通过 UDP 389 端口发送恶意 CLDAP 查询，触发栈缓冲区溢出，实现远程代码执行。</p>
+                        
+                        <p><strong>漏洞机制：</strong></p>
+                        <ul>
+                            <li><strong>类型：</strong>栈缓冲区溢出 → 零点击 RCE</li>
+                            <li><strong>攻击向量：</strong>UDP 389端口（CLDAP查询）</li>
+                            <li><strong>认证要求：</strong>无需认证</li>
+                            <li><strong>点击要求：</strong>零点击</li>
+                            <li><strong>后果：</strong>以SYSTEM权限运行，域控制器接管</li>
+                        </ul>
+
+                        <p><strong>与 Zerologon 对比：</strong></p>
+                        <table class="comparison-table">
+                            <tr><th>维度</th><th>Zerologon (2020)</th><th>CVE-2026-41089 (2026)</th></tr>
+                            <tr><td>CVE</td><td>CVE-2020-1472</td><td>CVE-2026-41089</td></tr>
+                            <tr><td>协议</td><td>Netlogon (RPC)</td><td>Netlogon (CLDAP)</td></tr>
+                            <tr><td>攻击方式</td><td>加密缺陷</td><td>栈缓冲区溢出</td></tr>
+                            <tr><td>认证要求</td><td>无需认证</td><td>无需认证</td></tr>
+                            <tr><td>点击要求</td><td>零点击</td><td>零点击</td></tr>
+                            <tr><td>成功率</td><td>单次请求100%</td><td>单次请求可触发</td></tr>
+                            <tr><td>影响</td><td>域控制器接管</td><td>域控制器接管</td></tr>
+                        </table>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>继 Zerologon 后第二个核弹级 Netlogon 漏洞：同为零点击、无需认证、CVSS 9.8</li>
+                            <li>在野利用已确认：比利时网络安全中心（CCB）于6月1日发布紧急警报</li>
+                            <li>域控制器一击即溃：成功利用可直接接管 Windows 域控制器，整个 Active Directory 域沦陷</li>
+                            <li>补丁已发但部署滞后：5月12日补丁已发布，但企业域控制器补丁部署通常较慢</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>立即应用微软5月补丁日更新，监控UDP 389端口异常流量，限制域控制器网络暴露面。</p>
+                    </div>
+
+                    <!-- Attack Flow -->
+                    <div class="attack-flow">
+                        <span class="flow-step">攻击者发送恶意CLDAP查询</span>
+                        <span class="flow-step">UDP 389端口触发栈溢出</span>
+                        <span class="flow-step">Netlogon服务内存损坏</span>
+                        <span class="flow-step">远程代码执行以SYSTEM权限运行</span>
+                        <span class="flow-step critical">域控制器接管</span>
+                        <span class="flow-step critical">整个AD域沦陷</span>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article class="article-card">
+                    <span class="article-number">2</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2024-21182 — Oracle WebLogic 两年前修补漏洞现被在野利用</h3>
+                    <div class="article-meta">
+                        <span>严重程度：Critical</span>
+                        <span>披露时间：2024年7月首次披露</span>
+                        <span class="cvss-score">CISA KEV收录</span>
+                    </div>
+                    <div class="article-body">
+                        <p>CVE-2024-21182 是 Oracle WebLogic Server 中的一个未授权访问漏洞，允许未经身份验证的攻击者通过 T3 或 IIOP 协议访问并接管 WebLogic 服务器。</p>
+                        
+                        <p><strong>漏洞要点：</strong></p>
+                        <ul>
+                            <li><strong>类型：</strong>未授权访问（T3/IIOP协议）</li>
+                            <li><strong>状态：</strong>在野利用已确认</li>
+                            <li><strong>CISA收录：</strong>2026年6月1日加入KEV目录</li>
+                            <li><strong>影响：</strong>Oracle WebLogic 广泛用于金融、政府、电信等行业</li>
+                        </ul>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>两年后被利用：漏洞披露两年后仍被攻击者利用，说明"已修补"不等于"已部署"</li>
+                            <li>CISA KEV 强制修复：美国联邦机构必须在截止日前完成修复</li>
+                            <li>攻击门槛低：无需认证，仅需网络可达即可利用</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>检查 WebLogic 版本，应用 2024 年 7 月补丁，限制 T3/IIOP 协议对外暴露。</p>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="article-card">
+                    <span class="article-number">3</span>
+                    <span class="severity-badge severity-high">高危</span>
+                    <h3 class="article-title">Red Hat npm 包供应链攻击 — 32 个官方包被入侵</h3>
+                    <div class="article-meta">
+                        <span>严重程度：High</span>
+                        <span>披露时间：2026年6月1日</span>
+                        <span>影响：@redhat-cloud-services 命名空间下 32 个 npm 包</span>
+                    </div>
+                    <div class="article-body">
+                        <p>2026年6月1日，Red Hat 官方 npm 命名空间下的 32 个包被供应链攻击入侵，攻击者注入了 96 个恶意版本。此次攻击分发了一种名为 "Miasma" 的凭证窃取恶意软件变种。</p>
+                        
+                        <p><strong>攻击手法：</strong></p>
+                        <ul>
+                            <li>凭证窃取蠕虫（类似 Mini Shai-Hulud）</li>
+                            <li>自动窃取 npm、GitHub 和云服务凭证</li>
+                            <li>可自动感染其他仓库，具有自我复制能力</li>
+                        </ul>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>官方命名空间被入侵：Red Hat 是全球最大的开源软件供应商之一</li>
+                            <li>自动传播蠕虫：恶意软件具有自我复制能力</li>
+                            <li>凭证窃取范围广：涵盖 npm、GitHub、AWS、Azure 等主流平台</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>检查项目依赖中是否包含受影响版本，使用 <code>npm audit</code> 扫描，启用包完整性校验。</p>
+                    </div>
+                </article>
+
+                <!-- Article 4 -->
+                <article class="article-card">
+                    <span class="article-number">4</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2025-48595 — Google Android 零日漏洞在野利用</h3>
+                    <div class="article-meta">
+                        <span>严重程度：Critical</span>
+                        <span>披露时间：2026年6月2日</span>
+                        <span>漏洞类型：Framework 层整数溢出提权</span>
+                    </div>
+                    <div class="article-body">
+                        <p>Google 于 2026 年 6 月发布 Android 安全公告，修复了 124 个漏洞，其中包括一个已被在野利用的零日漏洞 CVE-2025-48595。</p>
+                        
+                        <p><strong>漏洞要点：</strong></p>
+                        <ul>
+                            <li><strong>位置：</strong>Android Framework 层</li>
+                            <li><strong>类型：</strong>整数溢出漏洞</li>
+                            <li><strong>利用状态：</strong>在定向攻击中被利用（商业间谍软件/APT组织）</li>
+                            <li><strong>影响：</strong>所有 Android 设备，不依赖特定硬件厂商</li>
+                        </ul>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>商业间谍软件利用：Google 确认该漏洞已被商业间谍软件和 APT 组织在定向攻击中利用</li>
+                            <li>124 个漏洞修复：6 月安全更新是近年来规模最大的 Android 补丁之一</li>
+                            <li>Framework 层漏洞：影响所有 Android 设备</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>尽快应用 Android 6 月安全更新，仅从官方商店安装应用，启用 Google Play Protect。</p>
+                    </div>
+                </article>
+
+                <!-- Article 5 -->
+                <article class="article-card">
+                    <span class="article-number">5</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2026-8206 — Kirki WordPress 插件未授权权限提升</h3>
+                    <div class="article-meta">
+                        <span>CVSS 9.8</span>
+                        <span>受影响版本：Kirki 6.0.0 - 6.0.6</span>
+                        <span class="cvss-score">账户接管</span>
+                    </div>
+                    <div class="article-body">
+                        <p>Kirki 是 WordPress 上流行的免费页面构建器和自定义器插件。CVE-2026-8206 允许未经身份验证的攻击者通过未检查的密码重置机制，接管包括管理员在内的任何用户账户。</p>
+                        
+                        <p><strong>漏洞机制：</strong></p>
+                        <ul>
+                            <li><strong>类型：</strong>未授权权限提升（账户接管）</li>
+                            <li><strong>攻击方式：</strong>未检查用户身份直接重置密码</li>
+                            <li><strong>影响：</strong>超过百万活跃安装量</li>
+                        </ul>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>CVSS 9.8 满分级：未授权 + 网络可达 + 完全接管 = 最高风险组合</li>
+                            <li>影响范围广：Kirki 插件活跃安装量超过百万</li>
+                            <li>攻击门槛极低：无需认证，仅需发送一个密码重置请求即可接管任意账户</li>
+                            <li>已被在野利用：BleepingComputer 报道黑客正在利用此漏洞</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>立即更新 Kirki 插件至 6.0.7 或更高版本，检查 WordPress 用户账户是否异常。</p>
+                    </div>
+                </article>
+
+                <!-- Article 6 -->
+                <article class="article-card">
+                    <span class="article-number">6</span>
+                    <span class="severity-badge severity-high">高危</span>
+                    <h3 class="article-title">Dashlane 密码管理器暴力破解攻击</h3>
+                    <div class="article-meta">
+                        <span>严重程度：High</span>
+                        <span>披露时间：2026年6月1日</span>
+                        <span>影响：少于 20 个用户的加密保险库被下载</span>
+                    </div>
+                    <div class="article-body">
+                        <p>2026年5月31日，密码管理器 Dashlane 遭受暴力破解攻击。攻击者成功绕过了部分账户的双因素认证（2FA），导致少于 20 个个人订阅用户的加密保险库被下载。</p>
+                        
+                        <p><strong>攻击过程：</strong></p>
+                        <ul>
+                            <li>攻击者暴力破解登录尝试</li>
+                            <li>Dashlane 检测异常登录并锁定账户</li>
+                            <li>攻击者绕过 2FA</li>
+                            <li>加密保险库被下载</li>
+                        </ul>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>密码管理器安全事件：密码管理器是用户最敏感的数据存储之一</li>
+                            <li>2FA 绕过：攻击者成功绕过双因素认证，说明 2FA 并非绝对安全</li>
+                            <li>加密保险库泄露：虽然保险库是加密的，但攻击者可离线暴力破解弱密码</li>
+                            <li>响应及时：Dashlane 快速检测并锁定账户，限制了损失范围</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>使用强主密码，启用生物识别 2FA，定期检查账户活动。</p>
+                    </div>
+                </article>
+
+                <!-- Article 7 -->
+                <article class="article-card">
+                    <span class="article-number">7</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2026-0826 — HP VoIP 电话关键漏洞可导致企业网络被入侵</h3>
+                    <div class="article-meta">
+                        <span>CVSS 9.2</span>
+                        <span>披露时间：2026年6月2日（Rapid7 披露）</span>
+                        <span>影响：HP Poly Voice 多款 VoIP 电话</span>
+                    </div>
+                    <div class="article-body">
+                        <p>CVE-2026-0826 是 HP Poly Voice VoIP 电话中的一个栈缓冲区溢出漏洞，位于 SIP 协议解析机制中。攻击者可通过发送恶意 SIP 数据包，在受影响设备上以 root 权限执行任意代码。</p>
+                        
+                        <p><strong>漏洞机制：</strong></p>
+                        <ul>
+                            <li><strong>类型：</strong>栈缓冲区溢出 → 远程代码执行（root 权限）</li>
+                            <li><strong>攻击方式：</strong>发送恶意 SIP 数据包</li>
+                            <li><strong>后果：</strong>设备完全控制，可横向移动</li>
+                        </ul>
+
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>root 权限执行：成功利用可获得设备完全控制权，包括窃听通话、收集音频生成深度伪造</li>
+                            <li>企业网络入口：VoIP 电话通常位于企业内网，可作为横向移动的跳板</li>
+                            <li>语音深度伪造风险：攻击者可收集高管语音数据，用于生成深度伪造语音进行欺诈</li>
+                            <li>Rapid7 披露：知名安全研究机构 Rapid7 发现并披露</li>
+                        </ul>
+
+                        <p><strong>防御建议：</strong>检查 HP Poly Voice 固件版本，应用安全更新，将 VoIP 电话隔离到独立 VLAN。</p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Charts Section -->
+            <h3 class="section-header">风险分析</h3>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">今日漏洞风险象限（严重性 × 利用状态）</div>
+                    <div class="mermaid">
+quadrantChart
+    title 今日漏洞风险象限（严重性 × 利用状态）
+    x-axis "未确认在野利用" --> "已确认在野利用"
+    y-axis "中等严重" --> "极严重"
+    quadrant-1 "立即修复"
+    quadrant-2 "密切关注"
+    quadrant-3 "常规跟踪"
+    quadrant-4 "持续监控"
+    "CVE-2026-41089 Netlogon": [0.85, 0.95]
+    "CVE-2024-21182 Oracle WebLogic": [0.80, 0.80]
+    "CVE-2025-48595 Android零日": [0.75, 0.85]
+    "CVE-2026-8206 Kirki": [0.70, 0.90]
+    "CVE-2026-0826 HP VoIP": [0.30, 0.85]
+    "Red Hat npm供应链": [0.60, 0.70]
+    "Dashlane暴力破解": [0.65, 0.60]
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">本周事件时间线</div>
+                    <div class="mermaid">
+timeline
+    title 2026年5月底-6月初网安事件时间线
+    section 5月底
+        5月31日 : Dashlane暴力破解攻击开始
+    section 6月初
+        6月1日 : Red Hat npm包供应链攻击披露
+        6月1日 : CISA将Oracle WebLogic CVE-2024-21182加入KEV
+        6月1日 : 比利时CCB确认Netlogon漏洞在野利用
+        6月2日 : Google Android 6月安全公告(124个漏洞)
+        6月2日 : Kirki WordPress插件漏洞披露
+        6月2日 : HP VoIP电话漏洞披露(Rapid7)
+        6月2日 : Dashlane官方安全公告
+        6月3日 : Oracle月度关键安全补丁更新(77个漏洞)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mindmap Section -->
+            <h3 class="section-header">今日态势总览</h3>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">今日安全事件分类思维导图</div>
+                    <div class="mermaid">
+mindmap
+  root((6月3日态势))
+    零日与在野利用
+      Netlogon CVE-2026-41089
+      Android CVE-2025-48595
+      Oracle WebLogic CVE-2024-21182
+    供应链安全
+      Red Hat npm包被入侵
+      32个包/96个恶意版本
+      凭证窃取蠕虫
+    Web安全
+      Kirki CVE-2026-8206
+      WordPress账户接管
+      CVSS 9.8满分级
+    物联网安全
+      HP VoIP CVE-2026-0826
+      企业网络入口
+      语音深度伪造风险
+    密码管理安全
+      Dashlane暴力破解
+      2FA绕过
+      加密保险库泄露
+    行业动态
+      Oracle月度补丁更新
+      Google Android安全公告
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">受影响组件分布</div>
+                    <div class="mermaid">
+pie title 受影响组件分布
+    "Windows域控制器" : 25
+    "Oracle WebLogic" : 15
+    "Android设备" : 20
+    "WordPress站点" : 15
+    "npm包" : 10
+    "VoIP电话" : 10
+    "密码管理器" : 5
+                    </div>
+                </div>
+            </div>
+
+            <!-- References Section -->
+            <h3 class="section-header">相关出处</h3>
+            <div class="references-section">
+                <div class="references-grid">
+                    <div class="reference-item">
+                        <span class="reference-source">Daily Security Review</span>
+                        <a href="https://dailysecurityreview.com/resources/cve-2026-41089-exploited-windows-netlogon-rce-under-active-attack/">CVE-2026-41089 Windows Netlogon漏洞在野利用</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Windows Report</span>
+                        <a href="https://windowsreport.com/critical-windows-netlogon-bug-cve-2026-41089-now-exploited-in-the-wild/">CVE-2026-41089 深度分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">The Realist Juggernaut</span>
+                        <a href="https://therealistjuggernaut.com/2026/06/01/cisa-kev-alert-active-exploitation-detected-against-oracle-weblogic-server-vulnerability/">CVE-2024-21182 Oracle WebLogic在野利用</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Red Hat 安全公告</span>
+                        <a href="https://access.redhat.com/security/vulnerabilities/RHSB-2026-006">Red Hat npm包供应链攻击</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Rescana</span>
+                        <a href="https://www.rescana.com/post/critical-supply-chain-attack-compromises-32-red-hat-redhat-cloud-services-npm-packages-with-credential-stealing-malware">Red Hat npm包供应链攻击分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">BleepingComputer</span>
+                        <a href="https://www.bleepingcomputer.com/news/security/google-fixes-one-actively-exploited-android-zero-day-124-flaws/">CVE-2025-48595 Android零日漏洞</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">CSDN</span>
+                        <a href="https://blog.csdn.net/weixin_42376192/article/details/161643811">CVE-2025-48595 深度解析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Orca Security</span>
+                        <a href="https://orca.security/resources/blog/kirki-wordpress-plugin-vulnerability-cve-2026-8206/">CVE-2026-8206 Kirki WordPress插件漏洞</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">OpenCVE</span>
+                        <a href="https://app.opencve.io/cve/CVE-2026-8206">CVE-2026-8206 技术详情</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">The Hacker News</span>
+                        <a href="https://thehackernews.com/2026/06/dashlane-discloses-brute-force-attack.html">Dashlane暴力破解攻击</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Dashlane 官方</span>
+                        <a href="https://support.dashlane.com/hc/en-us/articles/36038764990866-Security-advisory-Brute-force-attack-on-Dashlane-user-accounts">Dashlane官方安全公告</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">SecurityWeek</span>
+                        <a href="https://www.securityweek.com/critical-vulnerability-in-hp-voip-phones-enables-enterprise-network-breaches/">CVE-2026-0826 HP VoIP电话漏洞</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">CSO Online</span>
+                        <a href="https://www.csoonline.com/article/4180223/hp-poly-voip-vulnerability-sets-the-stage-for-executive-voice-deepfakes.html">CVE-2026-0826 深度分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Oracle 官方</span>
+                        <a href="https://www.oracle.com/security-alerts/">Oracle月度关键安全补丁更新</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Google Android</span>
+                        <a href="https://source.android.com/docs/security/bulletin/2026-06-01">Google Android 6月安全公告</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">知乎</span>
+                        <a href="https://zhuanlan.zhihu.com/p/2043112087396816838">2026年上半年全球常规被利用漏洞全景分析</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="newspaper-footer">
+            <div class="footer-logo">AI城 · 网安日报</div>
+            <p class="footer-disclaimer">
+                免责声明：本报告基于公开信息整理，CVE编号、CVSS评分等数据以官方源为准。建议读者查阅原始来源获取最新动态。
+                <br>
+                每日精选 · 值得关注 | 2026年6月3日
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Noto Serif SC, Georgia, serif'
+        });
+    </script>
+</body>
+</html>
