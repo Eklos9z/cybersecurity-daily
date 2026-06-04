@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网安日报速递 - 2026年6月2日</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="newspaper">
+        <!-- Masthead -->
+        <header class="masthead">
+            <div class="newspaper-subtitle">AI城 · 网络安全</div>
+            <h1 class="newspaper-title">网安日报速递</h1>
+            <div class="newspaper-subtitle">CYBERSECURITY DAILY EXPRESS</div>
+        </header>
+
+        <!-- Edition Info -->
+        <div class="edition-info">
+            <span class="edition-date">2026年6月2日 星期一</span>
+            <span class="edition-number">第 20 期 | 总第 20 期</span>
+            <span>每日精选 · 值得关注</span>
+        </div>
+
+        <!-- Keywords Banner -->
+        <div class="keywords-banner">
+            <strong>今日关键词：</strong>Google MCP Toolbox DNS重绑定 · Gogs零日77天无补丁 · Carnival邮轮数据泄露 · Proofpoint 2026报告
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Main Headline -->
+            <div class="headline-section">
+                <h2 class="main-headline">Google MCP Toolbox DNS重绑定致企业数据库裸奔：AI Agent基础设施首现高危漏洞</h2>
+                <p class="sub-headline">CVE-2026-9739 CVSS 9.4，SSE传输路径硬编码 CORS 通配符，无需认证即可窃取企业数据库</p>
+            </div>
+
+            <!-- Featured Articles -->
+            <div class="articles-grid">
+                <!-- Featured Article 1 -->
+                <article class="article-card featured">
+                    <span class="article-number">1</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2026-9739 — Google MCP Toolbox DNS重绑定致企业数据库裸奔</h3>
+                    <div class="article-meta">
+                        <span>CVSS 4.0 = 9.4</span>
+                        <span class="cvss-score">AI基础设施</span>
+                        <span>受影响：Google MCP Toolbox for Databases（SSE 传输模式）</span>
+                    </div>
+                    <div class="article-body">
+                        <p>MCP Toolbox 是 Google 推出的数据库桥接工具，允许 AI Agent 通过 MCP 协议访问企业数据库。其 SSE 传输路径中硬编码了 <code>Access-Control-Allow-Origin: *</code>，使得 DNS 重绑定攻击可绕过浏览器同源策略。</p>
+                        <p><strong>攻击流程：</strong></p>
+                        <div class="attack-flow">
+                            <span class="flow-step">攻击者诱导用户访问恶意网站</span>
+                            <span class="flow-step">恶意脚本触发DNS重绑定</span>
+                            <span class="flow-step">浏览器域名解析从外部IP切换到内网MCP Toolbox</span>
+                            <span class="flow-step">SSE连接建立，Origin校验被绕过</span>
+                            <span class="flow-step critical">攻击者通过浏览器向数据库注入命令/提取数据</span>
+                        </div>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>AI Agent 基础设施首现高危漏洞：MCP 协议正快速成为 AI Agent 连接外部工具的标准</li>
+                            <li>攻击门槛极低：无需认证，仅需诱导用户访问恶意页面即可触发</li>
+                            <li>影响面广泛：所有使用 SSE 传输模式且未做网络隔离的实例均受影响</li>
+                        </ul>
+                        <p><strong>防御建议：</strong>审查所有 MCP Toolbox 实例，收紧 Origin 校验，最小权限配置数据库凭证，网络隔离避免公网暴露。</p>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article class="article-card">
+                    <span class="article-number">2</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">Gogs 零日 RCE — 77天无补丁，2400+实例裸奔</h3>
+                    <div class="article-meta">
+                        <span>CVSS = 9.4</span>
+                        <span class="cvss-score">零日无补丁</span>
+                        <span>受影响：Gogs 0.14.2、0.15.0+dev</span>
+                    </div>
+                    <div class="article-body">
+                        <p>Rapid7 研究员 Jonah Burgess 于3月17日报告 Gogs 参数注入导致 RCE 的漏洞，维护者3月28日确认收到后再无动作，至今未发布补丁，已持续77天。</p>
+                        <p><strong>利用链：</strong></p>
+                        <div class="attack-flow">
+                            <span class="flow-step">攻击者注册Gogs账户</span>
+                            <span class="flow-step">创建仓库启用Rebase Merging</span>
+                            <span class="flow-step">提交含恶意分支名的PR</span>
+                            <span class="flow-step">触发Rebase，分支名注入--exec参数</span>
+                            <span class="flow-step critical">任意命令执行</span>
+                            <span class="flow-step critical">读取所有仓库/转储凭证</span>
+                        </div>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>77天无响应：维护者确认收到后再无动作，至今未发布补丁</li>
+                            <li>利用门槛极低：默认配置下只需注册账户即可完成攻击</li>
+                            <li>暴露面：互联网上超过 2,400 个 Gogs 实例暴露</li>
+                            <li>影响严重：可读取所有仓库、转储密码哈希/API Token/SSH密钥/2FA 秘密</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="article-card">
+                    <span class="article-number">3</span>
+                    <span class="severity-badge severity-high">高危</span>
+                    <h3 class="article-title">Carnival 邮轮数据泄露 — 近600万旅客护照信息外泄</h3>
+                    <div class="article-meta">
+                        <span>影响人数：约 600 万</span>
+                        <span>攻击方式：社会工程学</span>
+                    </div>
+                    <div class="article-body">
+                        <p>Carnival Corporation 于6月1日正式披露，2026年4月发生的数据泄露事件导致近600万客户的敏感信息被未授权访问。</p>
+                        <p><strong>泄露数据类型：</strong></p>
+                        <table class="affected-table">
+                            <tr><th>数据类型</th><th>敏感级别</th></tr>
+                            <tr><td>姓名、地址</td><td>基本身份信息</td></tr>
+                            <tr><td>电子邮件、电话</td><td>联系方式</td></tr>
+                            <tr><td>出生日期</td><td>个人标识</td></tr>
+                            <tr><td>护照号码</td><td class="risk-high">🔴 高敏感</td></tr>
+                            <tr><td>驾照号码</td><td class="risk-high">🔴 高敏感</td></tr>
+                        </table>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>护照号码泄露：属于最高敏感级别的身份文件信息，可用于身份盗窃、伪造旅行证件</li>
+                            <li>攻击方式：社会工程学欺骗员工获取系统访问权限</li>
+                            <li>影响规模：600万用户量级在旅游行业数据泄露中属于重大事件</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Article 4 -->
+                <article class="article-card">
+                    <span class="article-number">4</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">Oracle CVE-2026-21992 — Identity Manager 未认证RCE（CVSS 9.8）</h3>
+                    <div class="article-meta">
+                        <span>CVSS = 9.8</span>
+                        <span class="cvss-score">IAM基础设施</span>
+                        <span>Oracle 6月1日发布额外安全警报</span>
+                    </div>
+                    <div class="article-body">
+                        <p>未认证攻击者可通过 HTTP 网络访问直接利用此漏洞，成功利用可完全接管 Oracle Identity Manager 和 Web Services Manager。</p>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>CVSS 9.8 满分级：未认证 + 网络可达 + 完全接管</li>
+                            <li>IAM基础设施沦陷：Identity Manager 是企业身份认证核心，被接管意味着攻击者可伪造任意身份</li>
+                            <li>6月1日额外警报：Oracle 发布额外安全警报通常意味着在野利用或威胁升级</li>
+                            <li>历史模式：Oracle IAM 组件曾多次成为国家级APT的目标</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Article 5 -->
+                <article class="article-card">
+                    <span class="article-number">5</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">CVE-2026-41089 — Windows Netlogon 零点击 RCE 持续在野利用</h3>
+                    <div class="article-meta">
+                        <span>CVSS = 9.8</span>
+                        <span class="cvss-score">在野利用</span>
+                        <span>继 Zerologon 后第二个核弹级漏洞</span>
+                    </div>
+                    <div class="article-body">
+                        <p>奇安信 CERT 监测到 CVE-2026-41089 在野利用，攻击者可通过 UDP 389 端口发送恶意 CLDAP 查询触发栈缓冲区溢出，实现零点击远程代码执行。</p>
+                        <p><strong>与 Zerologon 对比：</strong></p>
+                        <table class="comparison-table">
+                            <tr><th>维度</th><th>Zerologon (2020)</th><th>CVE-2026-41089 (2026)</th></tr>
+                            <tr><td>协议</td><td>Netlogon (RPC)</td><td>Netlogon (CLDAP)</td></tr>
+                            <tr><td>攻击方式</td><td>加密缺陷</td><td>栈缓冲区溢出</td></tr>
+                            <tr><td>认证要求</td><td>无需认证</td><td>无需认证</td></tr>
+                            <tr><td>点击要求</td><td>零点击</td><td>零点击</td></tr>
+                            <tr><td>影响</td><td>域控制器接管</td><td>域控制器接管</td></tr>
+                        </table>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>继 Zerologon 后第二个核弹级 Netlogon 漏洞</li>
+                            <li>在野利用已确认：奇安信 CERT 监测到在野利用</li>
+                            <li>域控制器一击即溃：整个 Active Directory 域沦陷</li>
+                            <li>补丁已发但部署滞后：攻击窗口仍在</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Article 6 -->
+                <article class="article-card">
+                    <span class="article-number">6</span>
+                    <span class="severity-badge severity-high">行业趋势</span>
+                    <h3 class="article-title">Proofpoint 2026漏洞利用全景报告 — AI加速CVE，24小时武器化</h3>
+                    <div class="article-meta">
+                        <span>发布时间：2026年5月底</span>
+                    </div>
+                    <div class="article-body">
+                        <p>Proofpoint 发布2026年漏洞利用全景报告，揭示AI加速CVE发现、NVD数据缺口、24小时武器化窗口等关键趋势。</p>
+                        <p><strong>核心发现：</strong></p>
+                        <table class="affected-table">
+                            <tr><th>发现</th><th>数据</th></tr>
+                            <tr><td>2026 Q1 CVE提交量</td><td>同比增长近 1/3</td></tr>
+                            <tr><td>在野利用CVE</td><td>12个</td></tr>
+                            <tr><td>CISA KEV 同期收录</td><td>8个（落后4个）</td></tr>
+                            <tr><td>零日漏洞增长</td><td>42%</td></tr>
+                            <tr><td>最快武器化时间</td><td class="risk-high">24小时</td></tr>
+                        </table>
+                        <p><strong>邮件武器化CVE（国家级APT）：</strong></p>
+                        <ul>
+                            <li>CVE-2026-21509：TA422 (APT28/俄) → 乌克兰政府/欧洲国防</li>
+                            <li>CVE-2026-21510：TA406 (朝鲜) → 签证/外交主题</li>
+                            <li>CVE-2026-32202：TA422 (APT28/俄) → 不完整补丁绕过零日</li>
+                        </ul>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>AI加速的是防御端：CVE数量激增主要源于安全研究人员使用AI加速漏洞发现</li>
+                            <li>NVD数据缺口：NIST国家漏洞数据库的富化处理速度已跟不上CVE提交量</li>
+                            <li>"新漏洞，老剧本"：攻击窗口期已压缩至48-72小时</li>
+                            <li>新攻击面出现：AI开发者工具成为与传统Web应用同等重要的暴露面</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Charts Section -->
+            <h3 class="section-header">风险分析</h3>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">今日漏洞风险象限（严重性 × 利用状态）</div>
+                    <div class="mermaid">
+quadrantChart
+    title 今日漏洞风险象限（严重性 × 利用状态）
+    x-axis "未确认在野利用" --> "已确认在野利用"
+    y-axis "中等严重" --> "极严重"
+    quadrant-1 "立即修复"
+    quadrant-2 "密切关注"
+    quadrant-3 "常规跟踪"
+    quadrant-4 "持续监控"
+    "CVE-2026-9739 MCP Toolbox": [0.45, 0.85]
+    "Gogs 零日 RCE": [0.75, 0.82]
+    "CVE-2026-21992 Oracle IAM": [0.55, 0.90]
+    "CVE-2026-41089 Netlogon": [0.80, 0.95]
+    "CVE-2026-0257 PAN-OS": [0.85, 0.70]
+    "Carnival 数据泄露": [0.90, 0.60]
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">2026年被利用漏洞来源对比</div>
+                    <div class="mermaid">
+pie title 2026年被利用漏洞来源对比
+    "CISA KEV已收录" : 8
+    "Proofpoint遥测发现（KEV未收录）" : 4
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Section -->
+            <h3 class="section-header">本周事件时间线</h3>
+            <div class="charts-grid">
+                <div class="chart-container" style="grid-column: span 2;">
+                    <div class="chart-title">2026年5月底-6月初网安事件时间线</div>
+                    <div class="mermaid">
+timeline
+    title 2026年5月底-6月初网安事件时间线
+    section 5月底
+        5月26日 : Play勒索攻击MyPillow/US Telecom
+        5月28日 : GitLab同日修复6个CVE
+        5月30日 : Gogs零日RCE首次报道
+    section 6月初
+        6月1日 : Carnival数据泄露披露(600万用户)
+        6月1日 : Oracle CVE-2026-21992额外安全警报
+        6月1日 : PAN-OS CVE-2026-0257联邦截止日到期
+        6月2日 : Gogs零日深度报道(BleepingComputer)
+        6月2日 : CVE-2026-9739 MCP Toolbox详情公开
+        6月2日 : Proofpoint 2026漏洞利用全景报告
+        6月2日 : Paris Cyber Summit / Infosecurity Europe开幕
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mindmap Section -->
+            <h3 class="section-header">今日态势总览</h3>
+            <div class="charts-grid">
+                <div class="chart-container" style="grid-column: span 2;">
+                    <div class="chart-title">6月2日网络安全态势思维导图</div>
+                    <div class="mermaid">
+mindmap
+  root((6月2日态势))
+    AI基础设施安全
+      MCP Toolbox DNS重绑定(CVSS 9.4)
+      AI开发者工具成新攻击面
+      LiteLLM/Marimo持续跟踪
+    零日与未修复
+      Gogs RCE 77天无补丁
+      Netlogon零点击RCE在野利用
+      Oracle IAM未认证接管
+    数据泄露
+      Carnival 600万护照信息
+      社会工程学攻击
+    行业趋势
+      Proofpoint报告
+      AI加速CVE发现
+      24小时武器化窗口
+      NVD数据缺口
+    行业会议
+      Paris Cyber Summit
+      Infosecurity Europe
+                    </div>
+                </div>
+            </div>
+
+            <!-- References Section -->
+            <h3 class="section-header">相关出处</h3>
+            <div class="references-section">
+                <div class="references-grid">
+                    <div class="reference-item">
+                        <span class="reference-source">CyberSecurityNews</span>
+                        <a href="https://cybersecuritynews.com/mcp-toolbox-vulnerability/">CVE-2026-9739 MCP Toolbox 漏洞详情</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">NetCrook</span>
+                        <a href="https://netcrook.com/written_article?slug=dns-rebinding-ai-database-bridge-high-risk-entry-point&lang=en">CVE-2026-9739 DNS重绑定技术分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">阿里云漏洞库</span>
+                        <a href="https://avd.aliyun.com/detail?id=AVD-2026-9739">CVE-2026-9739 阿里云漏洞库</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">BleepingComputer</span>
+                        <a href="https://www.bleepingcomputer.com/news/security/new-gogs-zero-day-flaw-lets-hackers-get-remote-code-execution/">Gogs零日RCE深度报道</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">prsol.cc</span>
+                        <a href="https://www.prsol.cc/2026/06/02/new-gogs-zero-day-flaw-lets-hackers-get-remote-code-execution/">Gogs零日RCE技术分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">ABC13</span>
+                        <a href="https://abc13.com/post/carnival-data-breach-passengers-information-including-passport-details-impacted-cybersecurity-incident-cruise-line-says/19208632/">Carnival数据泄露报道</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">USA Today</span>
+                        <a href="https://www.usatoday.com/story/travel/cruises/2026/06/01/carnival-data-breach-customer-data/90361396007/">Carnival数据泄露600万用户</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Proofpoint</span>
+                        <a href="https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild">Proofpoint 2026漏洞利用全景报告</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Oracle</span>
+                        <a href="https://www.oracle.com/security-alerts/alert-cve-2026-21992.html">Oracle CVE-2026-21992 安全警报</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">NVD</span>
+                        <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-21992">CVE-2026-21992 NVD详情</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">奇安信CERT</span>
+                        <a href="https://www.secrss.com/articles/90866">CVE-2026-41089 Windows Netlogon漏洞分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">CSDN</span>
+                        <a href="https://blog.csdn.net/weixin_42376192/article/details/161069739">CVE-2026-41089 深度剖析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Palo Alto Networks</span>
+                        <a href="https://security.paloaltonetworks.com/CVE-2026-0257">PAN-OS CVE-2026-0257 官方公告</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Paris Cyber Summit</span>
+                        <a href="https://www.paris-cyber-summit.com/">Paris Cyber Summit 2026</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Infosecurity Europe</span>
+                        <a href="https://www.infosecurityeurope.com/">Infosecurity Europe 2026</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">知乎</span>
+                        <a href="https://zhuanlan.zhihu.com/p/2043112087396816838">2026上半年常规被利用漏洞全景</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">The Register</span>
+                        <a href="https://www.theregister.com/cyber-crime/2026/05/26/mypillow-appears-on-play-ransomware-leak-site/5246513">Play勒索攻击MyPillow</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="newspaper-footer">
+            <div class="footer-logo">AI城 · 网安日报</div>
+            <p class="footer-disclaimer">
+                每日精选 · 值得关注 | 由 AI城 自动化工作流生成
+                <br>
+                本站内容基于公开信息整理，CVE编号及CVSS评分以官方源为准
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Noto Serif SC, Georgia, serif'
+        });
+    </script>
+</body>
+</html>
