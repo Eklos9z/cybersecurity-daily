@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网安日报速递 - 2026年6月13日</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+        :root {
+            --ink-black: #1a1a1a;
+            --ink-dark: #2d2d2d;
+            --paper-cream: #f5f0e8;
+            --paper-aged: #e8e0d0;
+            --accent-red: #c41e3a;
+            --accent-orange: #e85d04;
+            --accent-gold: #c9a227;
+            --border-dark: #3d3d3d;
+            --border-light: #b8b0a0;
+            --shadow-dark: rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--ink-black);
+            font-family: 'Noto Serif SC', 'Georgia', serif;
+            color: var(--ink-black);
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .newspaper {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--paper-cream);
+            box-shadow: 0 0 60px rgba(0,0,0,0.5), 0 0 120px rgba(0,0,0,0.3);
+            border: 3px solid var(--border-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newspaper::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 10% 10%, rgba(139,90,43,0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 90%, rgba(139,90,43,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.02) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ========== Masthead ========== */
+        .masthead {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 30px 40px 20px;
+            text-align: center;
+            border-bottom: 4px double var(--accent-gold);
+            position: relative;
+        }
+        .masthead::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 0; right: 0;
+            height: 2px;
+            background: var(--accent-red);
+        }
+        .newspaper-title {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 3.5em;
+            font-weight: 900;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background: linear-gradient(180deg, #fff 0%, #d4c5a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .newspaper-subtitle {
+            font-size: 1.2em;
+            letter-spacing: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        /* ========== Edition Info ========== */
+        .edition-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            background: var(--paper-aged);
+            border-bottom: 2px solid var(--border-light);
+            font-size: 0.85em;
+            color: var(--ink-dark);
+        }
+        .edition-date { font-weight: 700; color: var(--accent-red); }
+        .edition-number { font-style: italic; }
+
+        /* ========== Keywords Banner ========== */
+        .keywords-banner {
+            background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));
+            color: white;
+            padding: 12px 40px;
+            font-size: 0.95em;
+            letter-spacing: 2px;
+        }
+        .keywords-banner strong { margin-right: 10px; }
+
+        /* ========== Content ========== */
+        .content-wrapper {
+            padding: 30px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ========== Headlines ========== */
+        .headline-section {
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--ink-black);
+            padding-bottom: 30px;
+        }
+        .main-headline {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 2.8em;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            color: var(--ink-black);
+            border-left: 6px solid var(--accent-red);
+            padding-left: 20px;
+        }
+        .sub-headline {
+            font-size: 1.4em;
+            color: var(--ink-dark);
+            font-style: italic;
+            margin-bottom: 20px;
+            padding-left: 26px;
+        }
+
+        /* ========== Article Grid ========== */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .article-card {
+            border: 1px solid var(--border-light);
+            padding: 25px;
+            background: rgba(255,255,255,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px var(--shadow-dark);
+        }
+        .article-card.featured {
+            grid-column: span 2;
+            border: 2px solid var(--accent-red);
+            background: linear-gradient(135deg, rgba(196,30,58,0.05) 0%, rgba(255,255,255,0.8) 100%);
+        }
+        .article-number {
+            position: absolute;
+            top: -15px; left: 20px;
+            background: var(--ink-black);
+            color: var(--accent-gold);
+            width: 35px; height: 35px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; font-size: 1.1em;
+            border-radius: 50%;
+        }
+
+        /* ========== Severity Badges ========== */
+        .severity-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .severity-critical { background: var(--accent-red); color: white; }
+        .severity-high { background: var(--accent-orange); color: white; }
+        .severity-medium { background: var(--accent-gold); color: var(--ink-black); }
+
+        /* ========== Article Content ========== */
+        .article-title {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: var(--ink-black);
+        }
+        .article-meta {
+            font-size: 0.85em;
+            color: var(--ink-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .cvss-score {
+            display: inline-block;
+            background: var(--ink-black);
+            color: var(--accent-red);
+            padding: 2px 10px;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        .article-body {
+            font-size: 0.95em;
+            line-height: 1.9;
+            color: var(--ink-dark);
+        }
+        .article-body p { margin-bottom: 12px; text-indent: 2em; }
+        .article-body ul, .article-body ol { margin: 10px 0; padding-left: 2em; }
+        .article-body li { margin-bottom: 5px; }
+
+        /* ========== Section Headers ========== */
+        .section-header {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--ink-black);
+            border-bottom: 3px solid var(--ink-black);
+            padding-bottom: 10px;
+            margin: 40px 0 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-header::before {
+            content: '\00A7';
+            color: var(--accent-red);
+            font-size: 1.2em;
+        }
+
+        /* ========== Quick News ========== */
+        .quick-news {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .quick-item {
+            padding: 20px;
+            border-left: 4px solid var(--accent-orange);
+            background: rgba(232,93,4,0.05);
+        }
+        .quick-item h4 { font-size: 1.1em; margin-bottom: 8px; color: var(--ink-black); }
+        .quick-item p { font-size: 0.9em; color: var(--ink-dark); }
+
+        /* ========== Charts ========== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            border: 1px solid var(--border-light);
+            padding: 20px;
+            background: white;
+            text-align: center;
+        }
+        .chart-title {
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--ink-black);
+        }
+        .mermaid { display: flex; justify-content: center; }
+
+        /* ========== Attack Flow ========== */
+        .attack-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.03);
+            border-radius: 4px;
+        }
+        .flow-step {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 8px 16px;
+            font-size: 0.85em;
+            position: relative;
+        }
+        .flow-step::after {
+            content: '\2192';
+            position: absolute;
+            right: -20px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+        .flow-step:last-child::after { display: none; }
+        .flow-step.critical { background: var(--accent-red); }
+
+        /* ========== Tables ========== */
+        .affected-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .affected-table th {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 10px;
+            text-align: left;
+        }
+        .affected-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .affected-table tr:hover { background: rgba(232,93,4,0.05); }
+        .risk-high { color: var(--accent-red); font-weight: 700; }
+        .risk-medium { color: var(--accent-orange); font-weight: 700; }
+
+        /* ========== References ========== */
+        .references-section {
+            background: var(--paper-aged);
+            padding: 30px;
+            margin-top: 40px;
+            border-top: 4px double var(--ink-black);
+        }
+        .references-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .reference-item {
+            font-size: 0.8em;
+            padding: 10px;
+            background: white;
+            border: 1px solid var(--border-light);
+        }
+        .reference-item a {
+            color: var(--accent-red);
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .reference-item a:hover { text-decoration: underline; }
+        .reference-source {
+            font-weight: 700;
+            color: var(--ink-dark);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* ========== Footer ========== */
+        .newspaper-footer {
+            background: var(--ink-black);
+            color: var(--paper-cream);
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 4px double var(--accent-gold);
+        }
+        .footer-logo {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .footer-disclaimer {
+            font-size: 0.85em;
+            color: rgba(245,240,232,0.7);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ========== Responsive ========== */
+        @media (max-width: 1024px) {
+            .articles-grid { grid-template-columns: repeat(2, 1fr); }
+            .article-card.featured { grid-column: span 2; }
+        }
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .newspaper-title { font-size: 2em; letter-spacing: 4px; }
+            .main-headline { font-size: 1.8em; }
+            .articles-grid { grid-template-columns: 1fr; }
+            .article-card.featured { grid-column: span 1; }
+            .quick-news { grid-template-columns: 1fr; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .references-grid { grid-template-columns: 1fr; }
+            .edition-info { flex-direction: column; gap: 10px; }
+            .content-wrapper { padding: 20px; }
+            .masthead { padding: 20px; }
+        }
+        @media print {
+            body { background: white; padding: 0; }
+            .newspaper { box-shadow: none; border: none; }
+            .article-card:hover { transform: none; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="newspaper">
+        <!-- ========== 报头 ========== -->
+        <header class="masthead">
+            <div class="newspaper-subtitle">AI城 · 网络安全</div>
+            <h1 class="newspaper-title">网安日报速递</h1>
+            <div class="newspaper-subtitle">CYBERSECURITY DAILY EXPRESS</div>
+        </header>
+
+        <!-- ========== 日期栏 ========== -->
+        <div class="edition-info">
+            <span class="edition-date">2026年6月13日 星期五</span>
+            <span class="edition-number">第 31 期 | 总第 31 期</span>
+            <span>每日精选 · 值得关注</span>
+        </div>
+
+        <!-- ========== 关键词横幅 ========== -->
+        <div class="keywords-banner">
+            <strong>今日关键词：</strong>CVE-2026-35273 · 法国Tchap泄露 · Miasma供应链蠕虫 · ServiceNow API漏洞 · VMware XSS · VRChat数据泄露
+        </div>
+
+        <!-- ========== 正文 ========== -->
+        <div class="content-wrapper">
+
+            <!-- ===== 头条 ===== -->
+            <div class="headline-section">
+                <h2 class="main-headline">Oracle PeopleSoft零日CVE-2026-35273遭ShinyHunters大规模利用——100+组织沦陷，高校成重灾区</h2>
+                <p class="sub-headline">CVSS 9.8 · 未授权RCE · 零日无永久补丁 · 14天攻击窗口 · 45.5万学生数据泄露</p>
+            </div>
+
+            <!-- ===== 文章卡片网格 ===== -->
+            <div class="articles-grid">
+
+                <!-- ★ Featured 文章（占2列，左侧） -->
+                <article class="article-card featured">
+                    <span class="article-number">1</span>
+                    <span class="severity-badge severity-critical">严重</span>
+                    <h3 class="article-title">Oracle PeopleSoft零日CVE-2026-35273：ShinyHunters攻击100+组织</h3>
+                    <div class="article-meta">
+                        <span>CVSS 9.8</span>
+                        <span class="cvss-score">零日在野利用 · 无永久补丁</span>
+                    </div>
+                    <div class="article-body">
+                        <p>Oracle于6月12日紧急披露CVE-2026-35273，一个存在于PeopleSoft Enterprise PeopleTools（版本8.61和8.62）的PSEMHUB组件中的未授权RCE漏洞。攻击者通过向互联网可达的/PSEMHUB/hub端点发送特制HTTP POST请求，触发XML反序列化缺陷，在无需任何凭证的情况下执行任意Java代码。</p>
+                        <p><strong>漏洞机制/攻击方式：</strong></p>
+                        <ul>
+                            <li><strong>类型：</strong>XML反序列化未授权远程代码执行</li>
+                            <li><strong>攻击方式：</strong>HTTP POST /PSEMHUB/hub触发反序列化缺陷</li>
+                            <li><strong>影响范围：</strong>300+实例、100+组织（68%为高校）</li>
+                            <li><strong>后果：</strong>Java代码执行、数据窃取、勒索标记</li>
+                        </ul>
+                        <p><strong>值得关注的原因：</strong></p>
+                        <ul>
+                            <li>无永久补丁——Oracle仅提供紧急缓解措施</li>
+                            <li>诺丁汉大学确认泄露45.5万学生记录（40GB），含护照、残疾、信用卡数据</li>
+                            <li>攻击者基础设施伪装成Azure服务，检测难度极高</li>
+                            <li>攻击窗口仅14天（5/27-6/9），高校是重度用户</li>
+                        </ul>
+                    </div>
+                    <!-- 攻击流程图 -->
+                    <div class="attack-flow">
+                        <span class="flow-step">攻击者</span>
+                        <span class="flow-step">HTTP POST</span>
+                        <span class="flow-step">XML反序列化</span>
+                        <span class="flow-step">RCE执行</span>
+                        <span class="flow-step critical">40GB数据窃取</span>
+                    </div>
+                </article>
+
+                <!-- ★ 普通文章 2 -->
+                <article class="article-card">
+                    <span class="article-number">2</span>
+                    <span class="severity-badge severity-high">高危</span>
+                    <h3 class="article-title">法国政府通讯平台Tchap遭入侵：7.3万账户泄露</h3>
+                    <div class="article-meta">
+                        <span>社会工程学攻击</span>
+                        <span class="cvss-score">6月7日</span>
+                    </div>
+                    <div class="article-body">
+                        <p>法国政府加密通讯平台Tchap于6月7日遭入侵。攻击者通过社会工程学攻陷教育板块的一个合法用户账户，获取了65万条消息、7.3万个账户信息和13.5GB文档数据。</p>
+                        <p><strong>受影响组件：</strong></p>
+                        <table class="affected-table">
+                            <tr><th>数据类型</th><th>影响范围</th></tr>
+                            <tr><td>账户信息</td><td class="risk-high">73,000个账户</td></tr>
+                            <tr><td>消息记录</td><td class="risk-high">650,000条消息</td></tr>
+                            <tr><td>文档数据</td><td class="risk-medium">13.5GB</td></tr>
+                        </table>
+                    </div>
+                </article>
+
+                <!-- ★ 普通文章 3 -->
+                <article class="article-card">
+                    <span class="article-number">3</span>
+                    <span class="severity-badge severity-high">高危</span>
+                    <h3 class="article-title">Miasma供应链蠕虫：微软73个GitHub仓库沦陷</h3>
+                    <div class="article-meta">
+                        <span>供应链攻击 · 自我复制蠕虫</span>
+                        <span class="cvss-score">6月8日</span>
+                    </div>
+                    <div class="article-body">
+                        <p>名为"Miasma"的供应链蠕虫攻击感染了微软托管在GitHub上的73个开源项目，涉及Azure、Azure-Samples等四个组织。恶意代码在AI代理打开时自动执行，窃取开发者凭证。后续"Hades"波次在PyPI投放37个恶意Python包。</p>
+                    </div>
+                </article>
+
+                <!-- ★ 普通文章 4 -->
+                <article class="article-card">
+                    <span class="article-number">4</span>
+                    <span class="severity-badge severity-high">高危</span>
+                    <h3 class="article-title">ServiceNow API漏洞致客户数据泄露</h3>
+                    <div class="article-meta">
+                        <span>未认证API访问</span>
+                        <span class="cvss-score">6月5日确认</span>
+                    </div>
+                    <div class="article-body">
+                        <p>ServiceNow确认安全事件，威胁行为者利用未认证API端点查询托管客户实例中的数据。因"门控公告"策略，部分客户在被攻击后才收到通知。暴露的数据可能包括IT工单、员工记录等企业敏感信息。</p>
+                    </div>
+                </article>
+
+                <!-- ★ 普通文章 5 -->
+                <article class="article-card">
+                    <span class="article-number">5</span>
+                    <span class="severity-badge severity-medium">中高危</span>
+                    <h3 class="article-title">VMware Cloud Foundation多个存储型XSS漏洞</h3>
+                    <div class="article-meta">
+                        <span>CVE-2026-41722/41723/41724</span>
+                        <span class="cvss-score">VMSA-2026-0004</span>
+                    </div>
+                    <div class="article-body">
+                        <p>博通公司披露三个影响VMware Cloud Foundation Operations的存储型XSS漏洞。具有创建策略权限的攻击者可注入恶意脚本，当其他用户访问受影响页面时执行，可窃取会话令牌和执行管理员操作。</p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- ===== 速览区 ===== -->
+            <h3 class="section-header">速览区</h3>
+            <div class="quick-news">
+                <div class="quick-item">
+                    <h4>6. VRChat确认240万用户数据遭未授权访问</h4>
+                    <p>5月10-12日期间攻击者通过云环境漏洞访问了240万用户资料。不过向缅因州总检察长提交的泄露通知被证实为伪造，事件真相仍有争议。</p>
+                </div>
+                <div class="quick-item">
+                    <h4>7. Chrome V8引擎零日CVE-2026-11645在野利用</h4>
+                    <p>Google于6月9日修复2026年第5个被积极利用的Chrome零日，为V8引擎内存越界访问错误，CISA已将其加入KEV目录。</p>
+                </div>
+                <div class="quick-item">
+                    <h4>8. Ghidra路径遍历漏洞CVE-2026-52756</h4>
+                    <p>NSA逆向工程工具Ghidra 12.2之前版本存在未认证路径遍历漏洞（CVSS 4.8），IsfServer组件未正确验证客户端命名空间字符串。</p>
+                </div>
+                <div class="quick-item">
+                    <h4>9. FBI查封13个中国情报机构相关网站</h4>
+                    <p>FBI和司法部查封13个域名，声称被用于针对持有美国安全许可人员的情报收集。中国外交部驳斥了相关指控。</p>
+                </div>
+            </div>
+
+            <!-- ===== 风险分析图表 ===== -->
+            <h3 class="section-header">风险分析</h3>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">漏洞严重性 × 利用状态象限</div>
+                    <div class="mermaid">
+quadrantChart
+    title 今日漏洞严重性 × 利用状态
+    x-axis "未利用" --> "在野利用"
+    y-axis "低危" --> "严重"
+    quadrant-1 "紧急修复"
+    quadrant-2 "密切关注"
+    quadrant-3 "持续监控"
+    quadrant-4 "常规更新"
+    "CVE-2026-35273 PeopleSoft": [0.95, 0.98]
+    "CVE-2026-11645 Chrome V8": [0.85, 0.82]
+    "CVE-2026-41722 VMware XSS": [0.4, 0.65]
+    "CVE-2026-52756 Ghidra": [0.3, 0.48]
+    "Tchap政府通讯泄露": [0.7, 0.6]
+    "Miasma供应链蠕虫": [0.8, 0.75]
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">安全事件类型分布</div>
+                    <div class="mermaid">
+pie title 今日安全事件类型分布
+    "零日漏洞利用" : 30
+    "数据泄露" : 25
+    "供应链攻击" : 20
+    "政府系统入侵" : 15
+    "Web应用漏洞" : 10
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 本周时间线 ===== -->
+            <h3 class="section-header">本周事件时间线</h3>
+            <div class="timeline-section">
+                <div class="mermaid">
+timeline
+    title 2026年6月第2周网安事件
+    6月7日 : 法国Tchap政府通讯平台遭入侵
+    6月8日 : Miasma供应链蠕虫感染微软73个仓库
+           : VMware存储型XSS漏洞披露
+    6月9日 : Chrome V8零日CVE-2026-11645修复
+           : ServiceNow API漏洞安全更新
+    6月10日 : FBI查封13个中国情报相关域名
+    6月11日 : VRChat 240万用户数据泄露报告
+            : Ghidra路径遍历漏洞披露
+    6月12日 : Oracle PeopleSoft零日CVE-2026-35273紧急披露
+            : ShinyHunters攻击详情曝光
+    6月13日 : PeopleSoft攻击持续发酵
+            : 诺丁汉大学确认45.5万学生数据泄露
+                </div>
+            </div>
+
+            <!-- ===== 出处链接 ===== -->
+            <h3 class="section-header">相关出处</h3>
+            <div class="references-section">
+                <div class="references-grid">
+                    <div class="reference-item">
+                        <span class="reference-source">TechRadar</span>
+                        <a href="https://www.techradar.com/pro/security/oracle-warns-customers-of-critical-peoplesoft-attack-after-hundreds-of-servers-hacked-by-apparent-shinyhunters-data-theft-attacks">Oracle PeopleSoft Zero-Day CVE-2026-35273</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Decryption Digest</span>
+                        <a href="https://www.decryptiondigest.com/blog/oracle-peoplesoft-cve-2026-35273-psemhub-zero-day">PSEMHUB Zero-Day Exploit 详细分析</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Security Affairs</span>
+                        <a href="https://securityaffairs.com/193393/security/frances-government-messaging-app-tchap-got-breached.html">France Tchap Government Messaging Breach</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">TechRepublic</span>
+                        <a href="https://www.techrepublic.com/article/news-tchap-breach-emea-france/">Tchap Breach: 73K French Government Employees</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">The Hacker News</span>
+                        <a href="https://thehackernews.com/2026/06/miasma-worm-hits-73-microsoft-github.html">Miasma Worm Hits 73 Microsoft GitHub Repos</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">TechCrunch</span>
+                        <a href="https://techcrunch.com/2026/06/08/microsofts-open-source-tools-were-hacked-to-steal-passwords-of-ai-developers/">Microsoft Open Source Tools Hacked</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Rescana</span>
+                        <a href="https://www.rescana.com/post/servicenow-api-security-incident-exposes-customer-data-analysis-of-unauthenticated-access-vulnerability-june-2026">ServiceNow API Security Incident</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Cybersecurity News</span>
+                        <a href="https://cybersecuritynews.com/vmware-stored-xss-vulnerabilities/">VMware Stored XSS Vulnerabilities</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">UploadVR</span>
+                        <a href="https://www.uploadvr.com/vrchat-maine-attorney-general-fake-data-breach-notice/">VRChat Fake Data Breach Notice</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Privacy Guides</span>
+                        <a href="https://www.privacyguides.org/news/2026/06/12/data-breach-roundup-june-5-11-2026/">Data Breach Roundup June 5-11, 2026</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">Daily Security Review</span>
+                        <a href="https://dailysecurityreview.com/">FBI Seizes 13 Chinese Spy Sites</a>
+                    </div>
+                    <div class="reference-item">
+                        <span class="reference-source">NVD</span>
+                        <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-52756">CVE-2026-52756 Ghidra Path Traversal</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 页脚 ========== -->
+        <footer class="newspaper-footer">
+            <div class="footer-logo">AI城 · 网安日报</div>
+            <p class="footer-disclaimer">
+                免责声明：本报告基于公开信息整理，CVE编号、CVSS评分等数据以官方源为准。建议读者查阅原始来源获取最新动态。
+                <br>
+                每日精选 · 值得关注 | 2026年6月13日
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            fontFamily: 'Noto Serif SC, Georgia, serif'
+        });
+    </script>
+</body>
+</html>
