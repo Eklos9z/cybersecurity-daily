@@ -25,18 +25,13 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import androidx.glance.unit.Dp
 
 private const val BASE_URL = "https://unclecheng-li.github.io/cybersecurity-daily"
 
-/**
- * Jetpack Glance widget that displays the latest cybersecurity daily report
- * summary on the Android home screen. Tap to open full report in browser.
- */
 class CyberSecDailyWidget : GlanceAppWidget() {
 
-    override val sizeMode: SizeMode = SizeMode.Responsive(
-        setOf(SizeMode.Single, SizeMode.Exact)
-    )
+    override val sizeMode: SizeMode = SizeMode.Single
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val report = ReportFetcher.fetchLatest()
@@ -54,10 +49,9 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                     modifier = GlanceModifier
                         .fillMaxWidth()
                         .background(ColorProvider(android.graphics.Color.parseColor("#1a1a1a")))
-                        .padding(12.dp)
+                        .padding(Dp(12f))
                         .clickable(openAction),
                 ) {
-                    // ---- Title bar ----
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = GlanceModifier.fillMaxWidth()
@@ -80,15 +74,14 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                         }
                     }
 
-                    Spacer(modifier = GlanceModifier.height(6.dp))
+                    Spacer(modifier = GlanceModifier.height(Dp(6f)))
 
-                    // ---- Keywords row (red accent bar) ----
                     if (report.keywords.isNotEmpty()) {
                         Row(
                             modifier = GlanceModifier
                                 .fillMaxWidth()
                                 .background(ColorProvider(android.graphics.Color.parseColor("#c41e3a")))
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .padding(horizontal = Dp(8f), vertical = Dp(4f))
                         ) {
                             Text(
                                 text = truncate(report.keywords, if (isCompact) 40 else 60),
@@ -98,14 +91,13 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                                 maxLines = if (isCompact) 1 else 2
                             )
                         }
-                        Spacer(modifier = GlanceModifier.height(8.dp))
+                        Spacer(modifier = GlanceModifier.height(Dp(8f)))
                     }
 
-                    // ---- Headlines ----
                     val displayItems = report.headlines.take(if (isCompact) 2 else 4)
                     for ((index, item) in displayItems.withIndex()) {
                         if (index > 0) {
-                            Spacer(modifier = GlanceModifier.height(4.dp))
+                            Spacer(modifier = GlanceModifier.height(Dp(4f)))
                         }
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
@@ -115,7 +107,7 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                                     fontWeight = FontWeight.Bold,
                                 )
                             )
-                            Spacer(modifier = GlanceModifier.width(6.dp))
+                            Spacer(modifier = GlanceModifier.width(Dp(6f)))
                             Text(
                                 text = truncate(item, if (isCompact) 40 else 60),
                                 style = TextStyle(
@@ -126,9 +118,8 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                         }
                     }
 
-                    // ---- Error state ----
                     if (report.error != null) {
-                        Spacer(modifier = GlanceModifier.height(8.dp))
+                        Spacer(modifier = GlanceModifier.height(Dp(8f)))
                         Text(
                             text = report.error,
                             style = TextStyle(
@@ -138,9 +129,8 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                         )
                     }
 
-                    // ---- Bottom bar (hidden in compact mode) ----
                     if (!isCompact) {
-                        Spacer(modifier = GlanceModifier.height(8.dp))
+                        Spacer(modifier = GlanceModifier.height(Dp(8f)))
                         Row(
                             modifier = GlanceModifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
