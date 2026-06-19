@@ -3,10 +3,10 @@
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
-import androidx.glance.LocalSize
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
@@ -25,22 +25,35 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import androidx.glance.unit.Dp
 
 private const val BASE_URL = "https://unclecheng-li.github.io/cybersecurity-daily"
+private const val TAG = "CyberSecWidget"
 
 class CyberSecDailyWidget : GlanceAppWidget() {
 
     override val sizeMode: SizeMode = SizeMode.Single
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val report = ReportFetcher.fetchLatest()
-        val dailyUrl = "$BASE_URL/daily/${report.date}.html"
+        val report: DailyReport
+        val dailyUrl: String
 
+        try {
+            report = ReportFetcher.fetchLatest()
+            dailyUrl = "$BASE_URL/daily/${report.date}.html"
+        } catch (e: Exception) {
+            Log.e(TAG, "Fetch failed", e)
+            // Fallback: show placeholder content
+            renderContent(context, DailyReport.error("加载中，请检查网络"), BASE_URL)
+            return
+        }
+
+        renderContent(context, report, dailyUrl)
+    }
+
+    private suspend fun renderContent(context: Context, report: DailyReport, dailyUrl: String) {
         provideContent {
             GlanceTheme {
-                val size = LocalSize.current
-                val isCompact = size.width.value < 280
+                val hasError = report.error != null
                 val openAction = actionStartActivity(
                     Intent(Intent.ACTION_VIEW, Uri.parse(dailyUrl))
                 )
@@ -49,9 +62,10 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                     modifier = GlanceModifier
                         .fillMaxWidth()
                         .background(ColorProvider(android.graphics.Color.parseColor("#1a1a1a")))
-                        .padding(Dp(12f))
+                        .padding(12)
                         .clickable(openAction),
                 ) {
+                    // Title bar
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = GlanceModifier.fillMaxWidth()
@@ -74,63 +88,62 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                         }
                     }
 
-                    Spacer(modifier = GlanceModifier.height(Dp(6f)))
+                    Spacer(modifier = GlanceModifier.height(6))
 
-                    if (report.keywords.isNotEmpty()) {
-                        Row(
-                            modifier = GlanceModifier
-                                .fillMaxWidth()
-                                .background(ColorProvider(android.graphics.Color.parseColor("#c41e3a")))
-                                .padding(horizontal = Dp(8f), vertical = Dp(4f))
-                        ) {
-                            Text(
-                                text = truncate(report.keywords, if (isCompact) 40 else 60),
-                                style = TextStyle(
-                                    color = ColorProvider(android.graphics.Color.WHITE),
-                                ),
-                                maxLines = if (isCompact) 1 else 2
-                            )
-                        }
-                        Spacer(modifier = GlanceModifier.height(Dp(8f)))
-                    }
-
-                    val displayItems = report.headlines.take(if (isCompact) 2 else 4)
-                    for ((index, item) in displayItems.withIndex()) {
-                        if (index > 0) {
-                            Spacer(modifier = GlanceModifier.height(Dp(4f)))
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "\u25b8",
-                                style = TextStyle(
-                                    color = ColorProvider(android.graphics.Color.parseColor("#e85d04")),
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                            Spacer(modifier = GlanceModifier.width(Dp(6f)))
-                            Text(
-                                text = truncate(item, if (isCompact) 40 else 60),
-                                style = TextStyle(
-                                    color = ColorProvider(android.graphics.Color.parseColor("#e8e0d0")),
-                                ),
-                                maxLines = 1
-                            )
-                        }
-                    }
-
-                    if (report.error != null) {
-                        Spacer(modifier = GlanceModifier.height(Dp(8f)))
+                    if (hasError) {
+                        // Error state display
                         Text(
-                            text = report.error,
+                            text = report.error ?: "未知错误",
                             style = TextStyle(
-                                color = ColorProvider(android.graphics.Color.parseColor("#e85d04"))
+                                color = ColorProvider(android.graphics.Color.parseColor("#e85d04")),
                             ),
-                            maxLines = 2
+                            maxLines = 3
                         )
-                    }
+                    } else {
+                        // Keywords row
+                        if (report.keywords.isNotEmpty()) {
+                            Row(
+                                modifier = GlanceModifier
+                                    .fillMaxWidth()
+                                    .background(ColorProvider(android.graphics.Color.parseColor("#c41e3a")))
+                                    .padding(horizontal = 8, vertical = 4)
+                            ) {
+                                Text(
+                                    text = truncate(report.keywords, 60),
+                                    style = TextStyle(
+                                        color = ColorProvider(android.graphics.Color.WHITE),
+                                    ),
+                                    maxLines = 2
+                                )
+                            }
+                            Spacer(modifier = GlanceModifier.height(8))
+                        }
 
-                    if (!isCompact) {
-                        Spacer(modifier = GlanceModifier.height(Dp(8f)))
+                        // Headlines
+                        val items = if (report.headlines.isEmpty()) listOf("正在获取最新内容...") else report.headlines.take(4)
+                        for ((index, item) in items.withIndex()) {
+                            if (index > 0) Spacer(modifier = GlanceModifier.height(4))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "\u25b8",
+                                    style = TextStyle(
+                                        color = ColorProvider(android.graphics.Color.parseColor("#e85d04")),
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                )
+                                Spacer(modifier = GlanceModifier.width(6))
+                                Text(
+                                    text = truncate(item, 60),
+                                    style = TextStyle(
+                                        color = ColorProvider(android.graphics.Color.parseColor("#e8e0d0")),
+                                    ),
+                                    maxLines = 1
+                                )
+                            }
+                        }
+
+                        // Bottom bar
+                        Spacer(modifier = GlanceModifier.height(8))
                         Row(
                             modifier = GlanceModifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
@@ -143,7 +156,7 @@ class CyberSecDailyWidget : GlanceAppWidget() {
                             )
                             Spacer(modifier = GlanceModifier.defaultWeight())
                             Text(
-                                text = "\u70b9\u51fb\u9605\u8bfb\u5b8c\u6574\u65e5\u62a5 \u2192",
+                                text = "\u70b9\u51fb\u9605\u8bfb\u2192",
                                 style = TextStyle(
                                     color = ColorProvider(android.graphics.Color.parseColor("#c9a227"))
                                 )
